@@ -94,8 +94,6 @@ async function init() {
                 videoCanvas.height = video.videoHeight;
                 uiCanvas.width = video.videoWidth;
                 uiCanvas.height = 100;
-                // 점수 표시 위치 업데이트
-                scoreDisplayX = uiCanvas.width - 100;
             }
         }
 
@@ -253,8 +251,6 @@ function gameLoop() {
 }
 
 function drawGameUI() {
-    if (!isGameRunning) return;
-
     // UI 캔버스 초기화
     uiContext.clearRect(0, 0, uiCanvas.width, uiCanvas.height);
     
@@ -263,6 +259,12 @@ function drawGameUI() {
         uiContext.fillStyle = zone.color;
         uiContext.fillRect(targetX - zone.width / 2, 0, zone.width, arrowLayerHeight);
     });
+
+    // 점수 표시 (판정 영역 안에)
+    uiContext.font = '24px Arial';
+    uiContext.fillStyle = 'white';
+    uiContext.textAlign = 'center';
+    uiContext.fillText(`${score}`, targetX, scoreDisplayY);
 
     // 화살표 그리기
     arrows.forEach(arrow => {
@@ -278,12 +280,6 @@ function drawGameUI() {
             uiContext.fillText(`x: ${Math.round(arrow.x)}`, arrow.x, arrow.y + 30);
         }
     });
-
-    // 점수 표시
-    uiContext.font = '24px Arial';
-    uiContext.fillStyle = 'white';
-    uiContext.textAlign = 'right';
-    uiContext.fillText(`Score: ${score}`, scoreDisplayX, scoreDisplayY);
 }
 
 async function detectPose() {
@@ -414,21 +410,18 @@ let lastLogTime = 0;
 
 // 게임 상태 변수들
 const arrows = [];
-const arrowSpeed = -5;  // 음수로 변경하여 오른쪽에서 왼쪽으로 이동
-const arrowWidth = 50;
-const arrowHeight = 50;
-const arrowY = 50;  // UI 캔버스의 중앙
-const targetX = 100;  // 목표 영역을 왼쪽으로 이동 (100px 지점)
-const arrowLayerHeight = 100;  // 화살표 레이어의 높이
-const scoreDisplayY = 35;  // 점수 표시 Y 좌표
-const MAX_ARROWS = 3;  // 화면에 표시될 최대 화살표 개수
-let scoreDisplayX;  // 점수 표시 X 좌표는 canvas 초기화 후 설정
+const ARROW_INTERVAL = 2000; // 화살표 생성 간격 (ms)
+const MAX_ARROWS = 3;      // 최대 화살표 개수
+const arrowSpeed = -5;     // 화살표 이동 속도
+const arrowWidth = 30;     // 화살표 크기
+const arrowLayerHeight = 100; // 화살표 레이어 높이
+const targetX = 100;       // 목표 지점 X 좌표
+const scoreDisplayY = 30;   // 점수 표시 Y 좌표
+const directions = ['↑', '↗', '→', '↘', '↓', '↙', '←', '↖'];  // 8방향 화살표
+const arrowY = 50;  // 화살표 Y 좌표
 let lastArrowTime = 0;  // 마지막 화살표 생성 시간
-const ARROW_INTERVAL = 2000;  // 화살표 생성 간격 (2초)
 
-const directions = ['↑', '↗', '→', '↘', '↓', '↙', '←', '↖'];
-
-// 점수 영역 설정
+// 판정 영역 설정
 const scoreZones = {
     wow: {
         width: 30,
