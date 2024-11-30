@@ -1,0 +1,12 @@
+{
+  "name": "pump-game",
+  "version": "1.0.0",
+  "description": "Motion-based pump game using TensorFlow.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
