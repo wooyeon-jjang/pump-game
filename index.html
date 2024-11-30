@@ -21,34 +21,41 @@
             width: 100%;
             padding-top: 75%; /* 4:3 비율 유지 */
         }
-        #webcam {
+        #webcam, #videoCanvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            transform: scaleX(-1);
         }
-        #videoCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        #webcam {
+            object-fit: cover;
         }
         #uiCanvas {
             width: 100%;
             height: 100px;
-            background: rgba(0, 0, 0, 0.5);
             margin-bottom: 10px;
+            background-color: #000000;
         }
-        @media (max-width: 640px) {
-            .game-container {
-                padding: 5px;
-            }
-            #uiCanvas {
-                height: 80px;
-            }
+        .controls {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .credit-info {
+            display: inline-block;
+            margin-left: 20px;
+            color: #666;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            vertical-align: middle;
+        }
+        .credit-info a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .credit-info a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -57,12 +64,16 @@
         <div class="game-container">
             <canvas id="uiCanvas"></canvas>
             <div class="camera-view">
-                <video id="webcam" playsinline autoplay muted style="transform: scaleX(-1);"></video>
+                <video id="webcam" playsinline autoplay muted></video>
                 <canvas id="videoCanvas"></canvas>
             </div>
         </div>
         <div class="controls">
-            <button id="startButton" disabled>Loading Model...</button>
+            <button onclick="startGame()">게임 시작</button>
+            <div class="credit-info">
+                System design, development: <a href="https://x.com/@inwooyeon" target="_blank">@inWooyeon</a><br>
+                <small>The model is being developed based on a deep learning model.</small>
+            </div>
         </div>
     </div>
     <script src="game.js"></script>
